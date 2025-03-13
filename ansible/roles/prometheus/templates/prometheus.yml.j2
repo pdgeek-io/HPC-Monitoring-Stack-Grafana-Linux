@@ -1,0 +1,37 @@
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "node_exporter"
+    static_configs:
+      - targets: ["{{ groups['hpc_nodes'] | join(':9100,') }}:9100"]
+
+  - job_name: "gpu_exporter"
+    static_configs:
+      - targets: ["{{ groups['gpu'] | join(':9400,') }}:9400"]
+
+  - job_name: "slurm_exporter"
+    static_configs:
+      - targets: ["{{ groups['slurm'] | join(':9376,') }}:9376"]
+
+  - job_name: "weka_exporter"
+    static_configs:
+      - targets: ["{{ groups['weka_storage'] | join(':9180,') }}:9180"]
+
+  - job_name: "ecs_exporter"
+    static_configs:
+      - targets: ["{{ groups['object_storage'] | join(':9200,') }}:9200"]
+
+  - job_name: "infiniband_exporter"
+    static_configs:
+      - targets: ["{{ groups['infiniband'] | join(':9116,') }}:9116"]
+
+  - job_name: "juniper_snmp_exporter"
+    static_configs:
+      - targets: ["{{ groups['juniper'] | join(':9117,') }}:9117"]
+
+  - job_name: "vtune_nsight_exporter"
+    static_configs:
+      - targets: ["{{ groups['application_profiling'] | join(':9220,') }}:9220"]

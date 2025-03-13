@@ -1,0 +1,11 @@
+{
+    "dashboard": {
+        "title": "HPC Cluster Monitoring",
+        "panels": [
+            {"title": "CPU Utilization", "type": "graph", "targets": [{"expr": "avg by (instance) (node_cpu_seconds_total)"}]},
+            {"title": "Memory Usage", "type": "graph", "targets": [{"expr": "avg by (instance) (node_memory_MemAvailable_bytes)"}]},
+            {"title": "GPU Utilization", "type": "graph", "targets": [{"expr": "avg by (instance) (DCGM_FI_DEV_GPU_UTIL)"}]},
+            {"title": "Network Traffic", "type": "graph", "targets": [{"expr": "rate(node_network_receive_bytes_total[5m])"}]}
+        ]
+    }
+}

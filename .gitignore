@@ -1,0 +1,12 @@
+
+# Ignore system files
+.DS_Store
+*.log
+
+# Ignore compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore Ansible secrets
+*.vault
