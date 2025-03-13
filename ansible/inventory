@@ -1,6 +1,6 @@
 [compute_nodes]
-compute1.example.com
-compute2.example.com
+rocky1.example.com
+rocky2.example.com
 
 [gpu_nodes]
 gpu1.example.com
@@ -10,18 +10,3 @@ scheduler.example.com
 
 [storage_weka]
 weka1.example.com
-
-[object_storage_dell]
-dell1.example.com
-
-[network_infiniband]
-ib1.example.com
-
-[network_juniper]
-juniper1.example.com
-
-[filesystem_rocky]
-fs1.example.com
-
-[application_profiling]
-app1.example.com

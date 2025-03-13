@@ -10,65 +10,99 @@
   "panels": [
     {
       "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
       "id": 1,
-      "title": "Compute Node CPU Usage",
+      "title": "Rocky Linux CPU Usage",
       "type": "graph",
       "targets": [
-        {
-          "expr": "100 - (avg by (instance) (irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
-          "interval": "",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
+        { "expr": "100 - (avg by(instance)(irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)", "legendFormat": "{{instance}}", "refId": "A" }
       ]
     },
     {
       "datasource": "Prometheus",
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
       "id": 2,
+      "title": "Memory Utilization",
+      "type": "graph",
+      "targets": [
+        { "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100", "legendFormat": "{{instance}}", "refId": "B" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 3,
+      "title": "IO Wait",
+      "type": "graph",
+      "targets": [
+        { "expr": "irate(node_cpu_seconds_total{mode=\"iowait\"}[5m]) * 100", "legendFormat": "{{instance}}", "refId": "C" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 4,
+      "title": "Storage Utilization",
+      "type": "graph",
+      "targets": [
+        { "expr": "100 - (node_filesystem_free_bytes / node_filesystem_size_bytes * 100)", "legendFormat": "{{mountpoint}}", "refId": "D" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "Bps" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "id": 5,
+      "title": "Network Throughput",
+      "type": "graph",
+      "targets": [
+        { "expr": "irate(node_network_receive_bytes_total[5m])", "legendFormat": "{{instance}} recv", "refId": "E" },
+        { "expr": "irate(node_network_transmit_bytes_total[5m])", "legendFormat": "{{instance}} xmit", "refId": "F" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "id": 6,
       "title": "GPU Utilization",
       "type": "graph",
       "targets": [
-        {
-          "expr": "dcgm_gpu_utilization_percent",
-          "interval": "",
-          "legendFormat": "{{gpu}}",
-          "refId": "B"
-        }
+        { "expr": "dcgm_gpu_utilization_percent", "legendFormat": "{{gpu}}", "refId": "G" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "id": 7,
+      "title": "SLURM Job Queue Length",
+      "type": "graph",
+      "targets": [
+        { "expr": "slurm_job_queue_length", "legendFormat": "{{cluster}}", "refId": "H" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "id": 8,
+      "title": "WEKA Environment Metrics",
+      "type": "graph",
+      "targets": [
+        { "expr": "weka_metric", "legendFormat": "{{instance}}", "refId": "I" }
       ]
     }
   ],
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [
-    "hpc",
-    "monitoring"
-  ],
-  "templating": {
-    "list": []
-  },
-  "time": {
-    "from": "now-6h",
-    "to": "now"
-  },
-  "timepicker": {},
+  "tags": ["hpc", "rocky", "gpu", "slurm", "weka"],
+  "templating": { "list": [] },
+  "time": { "from": "now-12h", "to": "now" },
   "timezone": "",
   "title": "HPC Monitoring Dashboard",
   "uid": "hpc-monitoring",
