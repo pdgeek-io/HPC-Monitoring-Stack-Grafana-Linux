@@ -1,0 +1,6 @@
+---
+- name: Deploy Grafana Stack via Docker Compose
+  hosts: grafana
+  become: yes
+  roles:
+    - grafana_stack

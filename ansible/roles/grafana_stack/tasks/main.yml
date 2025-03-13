@@ -1,0 +1,8 @@
+---
+- name: Deploy Grafana Stack using Docker Compose
+  docker_compose:
+    project_src: "{{ grafana_stack_compose_file | dirname }}"
+    files:
+      - "{{ grafana_stack_compose_file | basename }}"
+    restarted: yes
+    project_name: "{{ grafana_stack_project_name }}"

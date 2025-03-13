@@ -6,11 +6,14 @@ rocky2.example.com
 rocky3.example.com
 rocky4.example.com
 
-[gpu_nodes]
-gpu1.example.com
+[grafana]
+grafana.example.com
 
 [job_scheduler]
 scheduler.example.com
 
 [storage_weka]
 weka1.example.com
+
+[gpu_nodes]
+gpu1.example.com
