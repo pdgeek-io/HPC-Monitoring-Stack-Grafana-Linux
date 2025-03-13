@@ -1,0 +1,4 @@
+dell_ecs_exporter_version: "1.0.0"
+dell_ecs_exporter_download_url: "https://example.com/dell_ecs_exporter-{{ dell_ecs_exporter_version }}.linux-amd64.tar.gz"
+dell_ecs_exporter_install_dir: "/usr/local/bin"
+dell_ecs_exporter_port: 9300

@@ -1,0 +1,46 @@
+---
+- name: Download Slurm Exporter
+  get_url:
+    url: "{{ slurm_exporter_download_url }}"
+    dest: "/tmp/slurm_exporter.tar.gz"
+    mode: '0644'
+  register: download_slurm
+
+- name: Extract Slurm Exporter binary
+  unarchive:
+    src: "/tmp/slurm_exporter.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+  when: download_slurm.changed
+
+- name: Move slurm_exporter binary to install directory
+  copy:
+    src: "/tmp/slurm_exporter-{{ slurm_exporter_version }}.linux-amd64/slurm_exporter"
+    dest: "{{ slurm_exporter_install_dir }}/slurm_exporter"
+    mode: '0755'
+  when: download_slurm.changed
+
+- name: Create systemd service for Slurm Exporter
+  copy:
+    dest: "/etc/systemd/system/slurm_exporter.service"
+    content: |
+      [Unit]
+      Description=Slurm Prometheus Exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ slurm_exporter_install_dir }}/slurm_exporter --web.listen-address=":{{ slurm_exporter_port }}"
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+    mode: '0644'
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable and start slurm_exporter service
+  systemd:
+    name: slurm_exporter
+    enabled: yes
+    state: started

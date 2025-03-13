@@ -1,0 +1,46 @@
+---
+- name: Download WekaFS Exporter
+  get_url:
+    url: "{{ wekafs_exporter_download_url }}"
+    dest: "/tmp/wekafs_exporter.tar.gz"
+    mode: '0644'
+  register: download_wekafs
+
+- name: Extract WekaFS Exporter binary
+  unarchive:
+    src: "/tmp/wekafs_exporter.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+  when: download_wekafs.changed
+
+- name: Move WekaFS Exporter binary to install directory
+  copy:
+    src: "/tmp/wekafs_exporter-{{ wekafs_exporter_version }}.linux-amd64/wekafs_exporter"
+    dest: "{{ wekafs_exporter_install_dir }}/wekafs_exporter"
+    mode: '0755'
+  when: download_wekafs.changed
+
+- name: Create systemd service for WekaFS Exporter
+  copy:
+    dest: "/etc/systemd/system/wekafs_exporter.service"
+    content: |
+      [Unit]
+      Description=WekaFS Prometheus Exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ wekafs_exporter_install_dir }}/wekafs_exporter --web.listen-address=":{{ wekafs_exporter_port }}"
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+    mode: '0644'
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable and start wekafs_exporter service
+  systemd:
+    name: wekafs_exporter
+    enabled: yes
+    state: started

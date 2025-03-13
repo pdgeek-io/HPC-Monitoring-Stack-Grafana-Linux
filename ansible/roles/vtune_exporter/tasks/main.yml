@@ -1,0 +1,10 @@
+---
+- name: Ensure VTune log directory exists
+  file:
+    path: "{{ vtune_exporter_log_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+# Additional tasks to parse and expose VTune logs can be added here.

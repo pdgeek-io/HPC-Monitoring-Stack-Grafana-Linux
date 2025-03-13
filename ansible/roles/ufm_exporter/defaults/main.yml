@@ -1,0 +1,4 @@
+ufm_exporter_version: "1.0.0"
+ufm_exporter_download_url: "https://example.com/ufm_exporter-{{ ufm_exporter_version }}.linux-amd64.tar.gz"
+ufm_exporter_install_dir: "/usr/local/bin"
+ufm_exporter_port: 9201

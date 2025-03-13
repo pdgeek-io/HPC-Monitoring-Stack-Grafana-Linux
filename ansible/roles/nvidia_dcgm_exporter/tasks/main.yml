@@ -1,0 +1,46 @@
+---
+- name: Download Nvidia DCGM Exporter
+  get_url:
+    url: "{{ nvidia_dcgm_download_url }}"
+    dest: "/tmp/dcgm-exporter.tar.gz"
+    mode: '0644'
+  register: download_dcgm
+
+- name: Extract Nvidia DCGM Exporter binary
+  unarchive:
+    src: "/tmp/dcgm-exporter.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+  when: download_dcgm.changed
+
+- name: Move dcgm-exporter binary to install directory
+  copy:
+    src: "/tmp/dcgm-exporter-{{ nvidia_dcgm_version }}.linux-amd64/dcgm-exporter"
+    dest: "{{ nvidia_dcgm_install_dir }}/dcgm-exporter"
+    mode: '0755'
+  when: download_dcgm.changed
+
+- name: Create systemd service for Nvidia DCGM Exporter
+  copy:
+    dest: "/etc/systemd/system/dcgm-exporter.service"
+    content: |
+      [Unit]
+      Description=Nvidia DCGM Exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ nvidia_dcgm_install_dir }}/dcgm-exporter --web.listen-address=":{{ nvidia_dcgm_port }}"
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+    mode: '0644'
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable and start dcgm-exporter service
+  systemd:
+    name: dcgm-exporter
+    enabled: yes
+    state: started

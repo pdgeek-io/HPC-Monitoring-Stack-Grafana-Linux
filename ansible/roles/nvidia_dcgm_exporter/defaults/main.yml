@@ -1,0 +1,4 @@
+nvidia_dcgm_version: "2.4.10"
+nvidia_dcgm_download_url: "https://github.com/NVIDIA/DCGMExporter/releases/download/v{{ nvidia_dcgm_version }}/dcgm-exporter-{{ nvidia_dcgm_version }}.linux-amd64.tar.gz"
+nvidia_dcgm_install_dir: "/usr/local/bin"
+nvidia_dcgm_port: 9400

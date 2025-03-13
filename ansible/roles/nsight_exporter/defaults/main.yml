@@ -1,0 +1,2 @@
+# Nsight integration similarly may involve log parsing.
+nsight_exporter_log_dir: "/var/log/nsight"

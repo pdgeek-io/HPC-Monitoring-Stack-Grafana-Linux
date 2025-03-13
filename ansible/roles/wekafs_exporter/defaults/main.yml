@@ -1,0 +1,4 @@
+wekafs_exporter_version: "1.0.0"
+wekafs_exporter_download_url: "https://example.com/wekafs_exporter-{{ wekafs_exporter_version }}.linux-amd64.tar.gz"
+wekafs_exporter_install_dir: "/usr/local/bin"
+wekafs_exporter_port: 9200

@@ -1,0 +1,46 @@
+---
+- name: Download UFM Exporter
+  get_url:
+    url: "{{ ufm_exporter_download_url }}"
+    dest: "/tmp/ufm_exporter.tar.gz"
+    mode: '0644'
+  register: download_ufm
+
+- name: Extract UFM Exporter binary
+  unarchive:
+    src: "/tmp/ufm_exporter.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+  when: download_ufm.changed
+
+- name: Move UFM Exporter binary to install directory
+  copy:
+    src: "/tmp/ufm_exporter-{{ ufm_exporter_version }}.linux-amd64/ufm_exporter"
+    dest: "{{ ufm_exporter_install_dir }}/ufm_exporter"
+    mode: '0755'
+  when: download_ufm.changed
+
+- name: Create systemd service for UFM Exporter
+  copy:
+    dest: "/etc/systemd/system/ufm_exporter.service"
+    content: |
+      [Unit]
+      Description=Mellanox UFM Exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ ufm_exporter_install_dir }}/ufm_exporter --web.listen-address=":{{ ufm_exporter_port }}"
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+    mode: '0644'
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable and start ufm_exporter service
+  systemd:
+    name: ufm_exporter
+    enabled: yes
+    state: started

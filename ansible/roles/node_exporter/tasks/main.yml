@@ -1,0 +1,42 @@
+---
+- name: Ensure node_exporter user exists
+  user:
+    name: "{{ node_exporter_user }}"
+    system: yes
+    shell: /sbin/nologin
+
+- name: Download node_exporter
+  get_url:
+    url: "{{ node_exporter_download_url }}"
+    dest: "/tmp/node_exporter.tar.gz"
+    mode: '0644'
+  register: download_result
+
+- name: Extract node_exporter binary
+  unarchive:
+    src: "/tmp/node_exporter.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+  when: download_result.changed
+
+- name: Move node_exporter binary to install directory
+  copy:
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+    dest: "{{ node_exporter_install_dir }}/node_exporter"
+    mode: '0755'
+  when: download_result.changed
+
+- name: Deploy systemd service for node_exporter
+  template:
+    src: "node_exporter.service.j2"
+    dest: "/etc/systemd/system/node_exporter.service"
+    mode: '0644'
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable and start node_exporter service
+  systemd:
+    name: node_exporter
+    enabled: yes
+    state: started

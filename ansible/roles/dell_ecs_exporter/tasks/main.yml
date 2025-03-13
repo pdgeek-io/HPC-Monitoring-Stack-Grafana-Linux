@@ -1,0 +1,46 @@
+---
+- name: Download Dell ECS Exporter
+  get_url:
+    url: "{{ dell_ecs_exporter_download_url }}"
+    dest: "/tmp/dell_ecs_exporter.tar.gz"
+    mode: '0644'
+  register: download_dell_ecs
+
+- name: Extract Dell ECS Exporter binary
+  unarchive:
+    src: "/tmp/dell_ecs_exporter.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+  when: download_dell_ecs.changed
+
+- name: Move Dell ECS Exporter binary to install directory
+  copy:
+    src: "/tmp/dell_ecs_exporter-{{ dell_ecs_exporter_version }}.linux-amd64/dell_ecs_exporter"
+    dest: "{{ dell_ecs_exporter_install_dir }}/dell_ecs_exporter"
+    mode: '0755'
+  when: download_dell_ecs.changed
+
+- name: Create systemd service for Dell ECS Exporter
+  copy:
+    dest: "/etc/systemd/system/dell_ecs_exporter.service"
+    content: |
+      [Unit]
+      Description=Dell ECS Prometheus Exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ dell_ecs_exporter_install_dir }}/dell_ecs_exporter --web.listen-address=":{{ dell_ecs_exporter_port }}"
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+    mode: '0644'
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable and start dell_ecs_exporter service
+  systemd:
+    name: dell_ecs_exporter
+    enabled: yes
+    state: started

@@ -1,0 +1,59 @@
+---
+- name: Download SNMP Exporter
+  get_url:
+    url: "{{ snmp_exporter_download_url }}"
+    dest: "/tmp/snmp_exporter.tar.gz"
+    mode: '0644'
+  register: download_snmp
+
+- name: Extract SNMP Exporter binary
+  unarchive:
+    src: "/tmp/snmp_exporter.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+  when: download_snmp.changed
+
+- name: Move SNMP Exporter binary to install directory
+  copy:
+    src: "/tmp/snmp_exporter-{{ snmp_exporter_version }}.linux-amd64/snmp_exporter"
+    dest: "{{ snmp_exporter_install_dir }}/snmp_exporter"
+    mode: '0755'
+  when: download_snmp.changed
+
+- name: Deploy SNMP Exporter configuration file
+  copy:
+    dest: "{{ snmp_exporter_config }}"
+    content: |
+      # SNMP Exporter configuration
+      modules:
+        default:
+          walk:
+            - 1.3.6.1.2.1.1
+            - 1.3.6.1.2.1.2
+          version: 2c
+    mode: '0644'
+
+- name: Create systemd service for SNMP Exporter
+  copy:
+    dest: "/etc/systemd/system/snmp_exporter.service"
+    content: |
+      [Unit]
+      Description=Prometheus SNMP Exporter
+      After=network.target
+
+      [Service]
+      ExecStart={{ snmp_exporter_install_dir }}/snmp_exporter --config.file={{ snmp_exporter_config }} --web.listen-address=":{{ snmp_exporter_port }}"
+      Restart=always
+
+      [Install]
+      WantedBy=default.target
+    mode: '0644'
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable and start snmp_exporter service
+  systemd:
+    name: snmp_exporter
+    enabled: yes
+    state: started

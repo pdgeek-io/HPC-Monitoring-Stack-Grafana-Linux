@@ -1,0 +1,56 @@
+---
+- name: Configure Compute Nodes with Node Exporter
+  hosts: compute_nodes
+  become: yes
+  roles:
+    - node_exporter
+
+- name: Configure GPU Nodes with Nvidia DCGM Exporter
+  hosts: gpu_nodes
+  become: yes
+  roles:
+    - nvidia_dcgm_exporter
+
+- name: Configure Job Scheduler with Slurm Exporter
+  hosts: job_scheduler
+  become: yes
+  roles:
+    - slurm_exporter
+
+- name: Configure WekaFS Storage with WekaFS Exporter
+  hosts: storage_weka
+  become: yes
+  roles:
+    - wekafs_exporter
+
+- name: Configure Dell ECS Object Storage Exporter
+  hosts: object_storage_dell
+  become: yes
+  roles:
+    - dell_ecs_exporter
+
+- name: Configure Infiniband Networking Exporters (SNMP and UFM)
+  hosts: network_infiniband
+  become: yes
+  roles:
+    - snmp_exporter
+    - ufm_exporter
+
+- name: Configure Juniper Networking with SNMP Exporter
+  hosts: network_juniper
+  become: yes
+  roles:
+    - snmp_exporter
+
+- name: Configure Filesystem Performance on Rocky Linux with Node Exporter
+  hosts: filesystem_rocky
+  become: yes
+  roles:
+    - node_exporter
+
+- name: Configure Application Profiling Exporters (VTune and Nsight)
+  hosts: application_profiling
+  become: yes
+  roles:
+    - vtune_exporter
+    - nsight_exporter

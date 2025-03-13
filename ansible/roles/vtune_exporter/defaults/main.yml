@@ -1,0 +1,2 @@
+# VTune integration typically involves log export rather than a running binary.
+vtune_exporter_log_dir: "/var/log/vtune"
