@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "SLURM Job Queue Length",
+      "type": "graph",
+      "targets": [
+        { "expr": "slurm_job_queue_length", "legendFormat": "{{cluster}}", "refId": "A" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "title": "Average Job Run Time",
+      "type": "graph",
+      "targets": [
+        { "expr": "avg(slurm_job_run_time_seconds)", "legendFormat": "{{cluster}}", "refId": "B" }
+      ]
+    }
+  ],
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": ["jobs", "slurm", "hpc"],
+  "templating": { "list": [] },
+  "time": { "from": "now-12h", "to": "now" },
+  "timezone": "",
+  "title": "HPC JOB Dashboard",
+  "uid": "job-dashboard",
+  "version": 1
+}

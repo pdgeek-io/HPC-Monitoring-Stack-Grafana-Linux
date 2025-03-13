@@ -1,6 +1,10 @@
-[compute_nodes]
+[hpc1]
 rocky1.example.com
 rocky2.example.com
+
+[hpc2]
+rocky3.example.com
+rocky4.example.com
 
 [gpu_nodes]
 gpu1.example.com

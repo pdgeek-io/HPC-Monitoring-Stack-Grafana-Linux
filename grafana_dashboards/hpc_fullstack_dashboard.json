@@ -1,0 +1,65 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "HPC1 - CPU Usage",
+      "type": "graph",
+      "targets": [
+        { "expr": "100 - (avg by(instance)(irate(node_cpu_seconds_total{mode=\"idle\", cluster=\"hpc1\"}[5m])) * 100)", "legendFormat": "{{instance}}", "refId": "A" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "title": "SLURM Job Queue",
+      "type": "graph",
+      "targets": [
+        { "expr": "slurm_job_queue_length", "legendFormat": "{{cluster}}", "refId": "B" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "Bps" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 3,
+      "title": "Network Throughput",
+      "type": "graph",
+      "targets": [
+        { "expr": "irate(node_network_transmit_bytes_total[5m])", "legendFormat": "{{instance}} tx", "refId": "C" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 4,
+      "title": "Average Job Run Time",
+      "type": "graph",
+      "targets": [
+        { "expr": "avg(slurm_job_run_time_seconds)", "legendFormat": "{{cluster}}", "refId": "D" }
+      ]
+    }
+  ],
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": ["full-stack", "hardware", "jobs", "hpc"],
+  "templating": { "list": [] },
+  "time": { "from": "now-12h", "to": "now" },
+  "timezone": "",
+  "title": "HPC Full Stack Monitor",
+  "uid": "fullstack-dashboard",
+  "version": 1
+}

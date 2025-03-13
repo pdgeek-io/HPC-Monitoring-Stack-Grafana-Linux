@@ -1,6 +1,6 @@
 ---
-- name: Configure Rocky Linux Compute Nodes with Node Exporter
-  hosts: compute_nodes
+- name: Configure HPC1 and HPC2 Compute Nodes with Node Exporter
+  hosts: hpc1:hpc2
   become: yes
   roles:
     - node_exporter

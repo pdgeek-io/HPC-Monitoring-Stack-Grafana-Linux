@@ -1,0 +1,87 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "HPC1 - CPU Usage",
+      "type": "graph",
+      "targets": [
+        { "expr": "100 - (avg by(instance)(irate(node_cpu_seconds_total{mode=\"idle\", cluster=\"hpc1\"}[5m])) * 100)", "legendFormat": "{{instance}}", "refId": "A" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "title": "HPC1 - Memory Usage",
+      "type": "graph",
+      "targets": [
+        { "expr": "(1 - (node_memory_MemAvailable_bytes{cluster=\"hpc1\"} / node_memory_MemTotal_bytes{cluster=\"hpc1\"})) * 100", "legendFormat": "{{instance}}", "refId": "B" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "Bps" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 3,
+      "title": "HPC1 - Network Throughput",
+      "type": "graph",
+      "targets": [
+        { "expr": "irate(node_network_transmit_bytes_total{cluster=\"hpc1\"}[5m])", "legendFormat": "{{instance}} tx", "refId": "C" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 4,
+      "title": "HPC1 - Storage Utilization",
+      "type": "graph",
+      "targets": [
+        { "expr": "100 - (node_filesystem_free_bytes{cluster=\"hpc1\"} / node_filesystem_size_bytes{cluster=\"hpc1\"} * 100)", "legendFormat": "{{mountpoint}}", "refId": "D" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "id": 5,
+      "title": "HPC2 - CPU Usage",
+      "type": "graph",
+      "targets": [
+        { "expr": "100 - (avg by(instance)(irate(node_cpu_seconds_total{mode=\"idle\", cluster=\"hpc2\"}[5m])) * 100)", "legendFormat": "{{instance}}", "refId": "E" }
+      ]
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "id": 6,
+      "title": "HPC2 - Memory Usage",
+      "type": "graph",
+      "targets": [
+        { "expr": "(1 - (node_memory_MemAvailable_bytes{cluster=\"hpc2\"} / node_memory_MemTotal_bytes{cluster=\"hpc2\"})) * 100", "legendFormat": "{{instance}}", "refId": "F" }
+      ]
+    }
+  ],
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": ["hardware", "hpc", "cluster"],
+  "templating": { "list": [] },
+  "time": { "from": "now-12h", "to": "now" },
+  "timezone": "",
+  "title": "Hardware Dashboard - HPC Clusters",
+  "uid": "hardware-dashboard",
+  "version": 1
+}
